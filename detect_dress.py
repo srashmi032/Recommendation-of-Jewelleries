@@ -1,16 +1,25 @@
 import Algorithmia
 import urllib, cStringIO
 from PIL import Image
+import base64
 
-file = cStringIO.StringIO(urllib.urlopen("http://i67.tinypic.com/mkvhiq.jpg").read())
-img = Image.open(file)
-#img.show()
-input = {"image": "http://i67.tinypic.com/mkvhiq.jpg"}
-#input=bytearray(open("/Users/rashmisahu/Desktop/am1.jpg", "rb").read())
+#provide image path as an input 
+img = Image.open('/Users/rashmisahu/Desktop/rashmi/internship/4.jpg')
+
+#provide image path as an input 
+#convert it into base 64 
+
+image = base64.b64encode( open( "/Users/rashmisahu/Desktop/rashmi/internship/4.jpg", "rb").read())
+input = {"image": 'data:image/jpg;base64,' + image.decode('ascii')}
+
 client = Algorithmia.client('simb+HoZt1y2rsh4qvaHZ4pGbdy1')
 algo = client.algo('algorithmiahq/DeepFashion/1.2.2')
 
-b= (algo.pipe(input).result)['articles']
+#here c contains type of dress and its boundind box in a list of dictionaries
+c=(algo.pipe(input).result)
+#print c
+
+b= c['articles']
 print b
 
 len1=len(b)
